@@ -8,11 +8,11 @@ axiom-scan subdomains.txt -m dnsx -resp -o dns.txt
 
 cat dns.txt | awk -F'[][]' '{print $2}' | anew ipaddrs.txt
 
-sort ipaddrs.txt | uniq -d > ipaddrs.txt
+#sort ipaddrs.txt | uniq -d > ipaddrs.txt
 
-axiom-scan ipaddrs.txt -m cf-check -o ipaddrs_filtered.txt
+#axiom-scan ipaddrs.txt -m cf-check -o ipaddrs_filtered.txt
 
-axiom-scan ipaddrs_filtered.txt -m exclude-cdn -o ipaddrs_filtered.txt
+#axiom-scan ipaddrs_filtered.txt -m exclude-cdn -o ipaddrs_filtered.txt
 
 axiom-scan ipaddrs.txt -m masscan -oX masscan.xml -rate=100000
 
