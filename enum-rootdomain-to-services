@@ -1,6 +1,7 @@
 #!/bin/sh
 
-wget https://gist.githubusercontent.com/pry0cc/dd2e7955d0a0222eb6c09cb283a6d614/raw/3c7bd4c20bb7649a944a36507073d9c9ab4100d8/ports.py -O ports.py
+#wget https://gist.githubusercontent.com/pry0cc/dd2e7955d0a0222eb6c09cb283a6d614/raw/3c7bd4c20bb7649a944a36507073d9c9ab4100d8/ports.py -O ports.py
+pip install python-libnmap
 
 axiom-scan scope.txt -m subfinder -o subdomains.txt --threads 3
 
@@ -14,11 +15,11 @@ cat dns.txt | awk -F'[][]' '{print $2}' | anew ipaddrs.txt
 
 #axiom-scan ipaddrs_filtered.txt -m exclude-cdn -o ipaddrs_filtered.txt
 
-axiom-scan ipaddrs.txt -m masscan -oX masscan.xml --ports 0-65535 &
+axiom-scan ipaddrs.txt -m masscan -oX masscan.xml --top-ports 100 &
 
-axiom-scan ipaddrs.txt -m nmap -oX nmap.xml -T4 -p- -sV
+axiom-scan ipaddrs.txt -m nmap -oX nmap.xml -T4 --top-ports 100 -sV
 
-ports.py nmap.xml | anew hostnames.txt
+python3 ports.py nmap.xml | anew hostnames.txt
 
 axiom-scan hostnames.txt -m httpx -o http_hosts.txt
 
