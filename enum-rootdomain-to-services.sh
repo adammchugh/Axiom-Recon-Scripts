@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#wget https://gist.githubusercontent.com/pry0cc/dd2e7955d0a0222eb6c09cb283a6d614/raw/3c7bd4c20bb7649a944a36507073d9c9ab4100d8/ports.py -O ports.py
+wget https://raw.githubusercontent.com/adammchugh/Axiom-Recon-Scripts/development/ports.py -O ports.py
 pip install python-libnmap
 
 axiom-scan scope.txt -m subfinder -o subdomains.txt --threads 3
