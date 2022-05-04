@@ -6,15 +6,17 @@ axiom-scan scope.txt -m subfinder -o subdomains.txt --threads 3
 
 axiom-scan subdomains.txt -m dnsx -resp -o dns.txt
 
-cat dns.txt | awk '{ print $2 }' | anew ipaddrs.txt
+cat dns.txt | awk -F'[][]' '{print $2}' | anew ipaddrs.txt
+
+sort ipaddrs.txt | uniq -d > ipaddrs.txt
 
 axiom-scan ipaddrs.txt -m cf-check -o ipaddrs_filtered.txt
 
-axiom-scan ipaddrs_filtered -m exclude-cdn -o ipaddrs_filtered.txt
+axiom-scan ipaddrs_filtered.txt -m exclude-cdn -o ipaddrs_filtered.txt
 
-axiom-scan ipaddrs_filtered.txt -m masscan -oX masscan.xml -rate=100000
+axiom-scan ipaddrs.txt -m masscan -oX masscan.xml -rate=100000
 
-axiom-scan ipaddrs_filtered.txt -m nmap -oX nmap.xml -T4 -p- -sV
+axiom-scan ipaddrs.txt -m nmap -oX nmap.xml -T4 -p- -sV
 
 ports.py nmap.xml | anew hostnames.txt
 
